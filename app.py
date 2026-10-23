@@ -4,15 +4,18 @@ from google import genai
 # Configuración básica de la página
 st.set_page_config(page_title="¡Aprende Inglés Natural!", page_icon="🧮")
 
-st.title("🧮 Calculadora de Inglés Natural")
+st.title("🧮 Aprende Inglés Natural")
 st.caption("Escribe tu frase para obtener directamente la versión en inglés natural.")
 
-# Campo en la barra lateral para ingresar la API Key
-api_key = st.sidebar.text_input("Ingresa tu API Key de Gemini", type="password")
+# 1. Obtenemos la API Key automáticamente desde los Secrets de Streamlit
+# (Esto reemplaza por completo el campo de texto de la barra lateral)
+api_key = st.secrets.get("GEMINI_API_KEY")
 
-if api_key:
+if not api_key:
+   st.error("No se encontró la API Key en los Secrets de Streamlit. Por favor, revísala en la configuración.")
+else:
     try:
-        # Inicializamos el cliente oficial de Google GenAI
+        # Inicializamos el cliente oficial de Google GenAI con la llave segura
         client = genai.Client(api_key=api_key)
 
         if "corrected_text" not in st.session_state:
