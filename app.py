@@ -2,7 +2,7 @@ import streamlit as st
 from google import genai
 
 # Configuración básica de la página
-st.set_page_config(page_title="Calculadora de Inglés Natural", page_icon="🧮")
+st.set_page_config(page_title="¡Aprende Inglés Natural!", page_icon="🧮")
 
 st.title("🧮 Calculadora de Inglés Natural")
 st.caption("Escribe tu frase para obtener directamente la versión en inglés natural.")
