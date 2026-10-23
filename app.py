@@ -46,10 +46,10 @@ else:
             else:
                 st.warning("Por favor ingresa una frase antes de hacer clic en corregir.")
 
-        # Mostramos el resultado si ya está guardado en la sesión
+        # 3. Mostramos el resultado con un bloque que incluye el botón de copiar automático
         if st.session_state.corrected_text:
             st.success("Versión en inglés natural:")
-            st.markdown(f"### {st.session_state.corrected_text}")
+            st.code(st.session_state.corrected_text, language="text")
 
     except Exception as e:
         st.error(f"Ocurrió un error al inicializar el cliente de Gemini: {e}")
