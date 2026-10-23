@@ -8,11 +8,10 @@ st.title("🧮 Aprende Inglés Natural")
 st.caption("Escribe tu frase para obtener directamente la versión en inglés natural.")
 
 # 1. Obtenemos la API Key automáticamente desde los Secrets de Streamlit
-# (Esto reemplaza por completo el campo de texto de la barra lateral)
 api_key = st.secrets.get("GEMINI_API_KEY")
 
 if not api_key:
-   st.error("No se encontró la API Key en los Secrets de Streamlit. Por favor, revísala en la configuración.")
+    st.error("No se encontró la API Key en los Secrets de Streamlit. Por favor, revísala en la configuración.")
 else:
     try:
         # Inicializamos el cliente oficial de Google GenAI con la llave segura
@@ -24,7 +23,7 @@ else:
         def clear_screen():
             st.session_state.corrected_text = ""
 
-        # 1. Campo de entrada del usuario
+        # 2. Campo de entrada del usuario
         user_input = st.text_input(
             "1. Escribe tu frase en inglés (tu intento o calco):",
             placeholder="Ejemplo: I have 25 years old",
@@ -38,7 +37,7 @@ else:
 
                 try:
                     response = client.models.generate_content(
-                        model='gemini-3.5-flash',
+                        model='gemini-1.5-flash',
                         contents=prompt,
                     )
                     st.session_state.corrected_text = response.text.strip()
@@ -47,28 +46,10 @@ else:
             else:
                 st.warning("Por favor ingresa una frase antes de hacer clic en corregir.")
 
-        # 2. Área de resultado
+        # Mostramos el resultado si ya está guardado en la sesión
         if st.session_state.corrected_text:
-            st.markdown("---")
-            st.subheader("2. Versión Natural:")
-            st.code(st.session_state.corrected_text, language="text")
-
-            # 3. Práctica de reescritura
-            st.markdown("---")
-            st.subheader("3. Practica reescribiendo la frase natural:")
-            practice_input = st.text_input(
-                "Teclea aquí la versión correcta para fijarla en tu memoria:",
-                key="practice_input_key"
-            )
-            if practice_input:
-                if practice_input.strip() == st.session_state.corrected_text.strip():
-                    st.success("✅ ¡Excelente! Frase memorizada correctamente.")
-                else:
-                    st.warning("⚠️ Hay alguna diferencia. Revisa mayúsculas o signos de puntuación.")
-
-            st.button("Limpiar y nueva frase 🧹", on_click=clear_screen)
+            st.success("Versión en inglés natural:")
+            st.markdown(f"### {st.session_state.corrected_text}")
 
     except Exception as e:
-        st.error(f"Error al configurar la API Key: {e}")
-else:
-    st.info("👈 Por favor, ingresa tu API Key en la barra lateral para comenzar.")
+        st.error(f"Ocurrió un error al inicializar el cliente de Gemini: {e}")
